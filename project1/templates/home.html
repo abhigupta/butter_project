@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>[[ page.fields.seo.title ]]</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div id="app">
+    <p><a href="blog">Check out the blog</a></p>
+    <p>This is an homepage loaded from ButterCMS via Vue.js. The homepage is
+      made up of multiple components. It lists fields and values of each
+      component. </p>
+
+    <div v-for="(component, key) in page.fields.body" :key="key">
+      <h2>Component Type: [[ component.type ]]</h2>
+      <table>
+        <!-- <caption>Component Type: [[ component.type ]]</caption> -->
+        <thead style="text-align: left;">
+          <tr>
+            <th>Field Name</th>
+            <th>Field Value</th>
+          </tr>
+        </thead>
+        <template v-for="(field, key) in component.fields">
+          <tr style="text-align: left;">
+            <td>[[ key ]]</td>
+            <td>[[ field ]]</td>
+          </tr>
+        </template>
+      </table>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js"
+    integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      delimiters: ['[[', ']]'],
+      name: 'HomePage',
+      data() {
+        return {
+          loading: true,
+          page: [],
+        }
+      },
+      mounted() {
+        this.getData(); // Get all the data for the page
+      },
+      methods: {
+        getData() {
+          axios({
+            method: 'get',
+            url: 'https://api.buttercms.com/v2/pages/landing-page/landing-page-with-components/',
+            params: { 'auth_token': '{{ auth_token }}' }
+          })
+            .then(response => {
+              this.page = response.data["data"];
+              this.loading = false;
+            })
+            .catch(err => {
+              this.loading = false;
+              this.error = err;
+            });
+        }
+      }
+
+    })
+  </script>
+</body>
+
+</html>

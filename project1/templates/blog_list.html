@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Blog Post Listing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  {% for entry in latest_posts %}
+  <article>
+    <h2 class="{{ entry.published|date:'l' }}">
+      {{ entry.published|date:'Y-m-d H:i' }}
+    </h2>
+    <h3>
+      <a href="{% url 'blog_detail' entry.url %}">
+        {{ entry.title }}
+
+      </a>
+    </h3>
+    <p>{{ entry.meta_description}}</p>
+  </article>
+  {% endfor %}
+</body>
+
+</html>
