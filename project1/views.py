@@ -36,7 +36,6 @@ class BlogPostView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(BlogPostView, self).get_context_data(**kwargs)
-        print(context)
         response = client.posts.get(context['slug'])
         context['post'] = response['data']
         return context
